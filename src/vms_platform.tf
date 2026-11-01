@@ -84,6 +84,12 @@ variable "vm_db_preemptible" {
   description = "Enable preemptible mode for the DB VM (usually false for DB)"
 }
 
+variable "vm_nat_enabled" {
+  type        = bool
+  default     = true
+  description = "Включить NAT для сетевых интерфейсов ВМ"
+}
+
 variable "vms_resources" {
   type = map(object({
     cores = number
@@ -100,6 +106,25 @@ variable "vms_resources" {
       cores         = 2
       memory        = 2
       core_fraction = 20
+    }
+  }
+}
+
+variable "vms_metadata" {
+  type = map(object({
+    serial_port_enable = string
+    ssh_keys           = string
+  }))
+  description = "Metadata для ВМ: serial-port-enable и ssh-keys"
+  default = {
+    "web" = {
+      serial_port_enable = "1"
+      # Ключ подставляем уже при использовании переменной, не в default
+      ssh_keys           = ""
+    }
+    "db" = {
+      serial_port_enable = "1"
+      ssh_keys           = ""
     }
   }
 }

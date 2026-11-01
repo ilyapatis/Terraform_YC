@@ -1,4 +1,5 @@
 ###cloud vars
+
 variable "vms_ssh_public_root_key" {
   type        = string
   sensitive   = true
@@ -49,24 +50,28 @@ variable "vpc_name" {
 
 ###ssh vars
 
-variable "vms_ssh_root_key" {
-  type        = string
-  default     = "<your_ssh_id_rsa_key>"
-  description = "ssh-keygen -t rsa -b 4096"
-}
+#variable "vms_ssh_root_key" {
+# type        = string
+# default     = "<your_ssh_id_rsa_key>"
+# description = "ssh-keygen -t rsa -b 4096"
+#}
 
 variable "name" {
+  type        = string
   default     = "netology"
 }
 
 variable "env" {
+  type        = string
   default     = "develop"
 }
 
 variable "project" {
+  type        = string
   default     = "platform"
 }
 
 variable "role" {
-   default = ["web", "db"]
+  type    = list(string)
+  default = ["web", "db"]
 }

@@ -26,7 +26,7 @@ data "yandex_compute_image" "ubuntu_db" {
 
 # Web VM
 resource "yandex_compute_instance" "platform_web" {
-  name        = local.web
+  name = local.vm_names["web"]
   platform_id = var.vm_web_platform_id
   zone           = var.zone_a
 
@@ -48,15 +48,18 @@ resource "yandex_compute_instance" "platform_web" {
 
   network_interface {
     subnet_id = yandex_vpc_subnet.develop_web.id
-    nat       = true
+    nat       = var.vm_nat_enabled
   }
 
-  metadata = local.vms_metadata
+  metadata = {
+    "serial-port-enable" = var.vms_metadata["web"].serial_port_enable
+    "ssh-keys"           = "ubuntu:${var.vms_ssh_public_root_key}"
+  }
 }
 
 # DB VM
 resource "yandex_compute_instance" "platform_db" {
-  name        = local.db
+  name = local.vm_names["db"]
   platform_id = var.vm_db_platform_id
   zone           = var.zone_e
 
@@ -78,8 +81,11 @@ resource "yandex_compute_instance" "platform_db" {
 
   network_interface {
     subnet_id = yandex_vpc_subnet.develop_db.id
-    nat       = true
+    nat       = var.vm_nat_enabled
   }
 
-  metadata = local.vms_metadata
+  metadata = {
+    "serial-port-enable" = var.vms_metadata["db"].serial_port_enable
+    "ssh-keys"           = "ubuntu:${var.vms_ssh_public_root_key}"
+  }
 }
